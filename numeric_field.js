@@ -1,4 +1,5 @@
 // - Numeric Field - Luan Nico
+// - github.com/luanpotter/jquery
 // - Version: 0.2
 
 (function( $ ) {
