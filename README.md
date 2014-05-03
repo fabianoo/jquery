@@ -18,3 +18,6 @@ master_checkbox :
 
 masked_field : 
   Fork of Igor Escobar's jQuery-Mask-Plugin. Added a few more funcionalities, see file for changes.
+
+string_validations :
+  Great plugin that adds string per-char validation to jQuery. You can specify a set of allowed or forbidden characters. More info on the file comments.
