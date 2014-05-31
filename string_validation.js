@@ -9,15 +9,16 @@
  * If null or '', allow anything
  * Otherwise, parse per word; each word can be:
  * * A pre-def, including: down_letters, up_letters, letters, digits, ponctuations, invalids, space
- * * An array of chars: [aeiou], [13579] (Except spaces, see below!)
+ * * An array of chars: [aeiou], [13579] (Except spaces and brackets, see below!)
  * * Any of the previus preceded with ^ (not) symbol
  * So for example:
  * * letters ^[aeiouAEIOU]: any consonant
  * * letters digits ^[0kyx]: any letter or digit, except 0, k, y and x
  * * ^invalids: any characters, except invalid characters
- * IMPORTANT NOTE: The array notation cannot contain the character space! Use the space pre-def if you want; e.g.:
+ * IMPORTANT NOTE: The array notation cannot contain the characters space and brackets ([, ])! Use the space, brl, brr, brackets pre-def if you want; e.g.:
  * * [abc ] -> [abc] space
  * * ^[xyz ] -> ^[xyz] ^space
+ * * [abc]] -> [abc] brr
  */
 
 (function ($) {
@@ -53,7 +54,10 @@
             digits: '0123456789'.split(''),
             ponctuations: '.,:;!?()-'.split(''),
             invalids: '\\/<>\'"'.split(''),
-            space: [' ']
+            space: [' '],
+            brl: ['['],
+            brr: [']'],
+            brackets: ['[', ']']
         };
 
         var add = [], remove = [];
