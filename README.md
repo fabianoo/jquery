@@ -16,6 +16,12 @@ master_checkbox :
   When the master is checked, all others are checked. When it is unchecked, all others are unchecked.
   When all the others are checked, the master is checked. When one of the others is unchecked, the master is unchecked.
 
+collapsable_elements :
+  Call $.setupCollapsable with the options once and just add data-collapsable-for attribute in any element.
+  By clicking on the elements with the data- attribute, the div specified inside will be collapsed/expanded, and the element will have it's value updated.
+  The initial text is also auto setup.
+  Options include both labels and the data- attribute name.
+
 masked_field : 
   Fork of Igor Escobar's jQuery-Mask-Plugin. Added a few more funcionalities, see file for changes.
 
