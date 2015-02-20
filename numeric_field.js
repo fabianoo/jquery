@@ -12,9 +12,9 @@
         var settings = $.extend({
             integer: true, //If it has to be an integer or can be a rational
             min: null, //The minimum value, inclusive
-            max: null, //The maxmum value, inclusive
+            max: null, //The maximum value, inclusive
             decimal: '.', //The decimal separator
-            auto_update: false //If the field should auto update to fit min and max on blur
+            auto_update: false //If the field should auto update to fit minimum and maximum on blur
         }, options);
 
         var NUMBERS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
