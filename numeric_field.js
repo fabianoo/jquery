@@ -13,7 +13,9 @@
             integer: true, //If it has to be an integer or can be a rational
             min: null, //The minimum value, inclusive
             max: null, //The maximum value, inclusive
+            maxDec: null, // The maximum amount of decimal places, if any
             decimal: '.', //The decimal separator
+            thousands: null, //Thousands separator, if desired
             auto_update: false //If the field should auto update to fit minimum and maximum on blur
         }, options);
 
@@ -30,6 +32,10 @@
             });
         }
 
+        var everyThree = function (x, c) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, c);
+        };
+
         this.bind('input keyup keydown', function () {
             //strip invalid characters
             var i = 0;
@@ -44,8 +50,16 @@
             }
 
             var dotAlready = false;
+            var dotPosition;
             for (; i < $(this).val().length; i++) {
                 if ($(this).val()[i] in NUMBERS) {
+                    if (settings.maxDec && dotAlready && (i - dotPosition) > settings.maxDec) {
+                        $(this).stripOut(i);
+                    }
+                    continue;
+                }
+                if ($(this).val()[i] === settings.thousands) {
+                    $(this).stripOut(i);
                     continue;
                 }
                 if ($(this).val()[i] === settings.decimal) {
@@ -54,11 +68,21 @@
                         i--;
                     } else {
                         dotAlready = true;
+                        dotPosition = i;
                     }
                 } else {
                     $(this).stripOut(i); //anything else
                     i--;
                 }
+            }
+
+            var endIntegerPart = $(this).val().indexOf(settings.decimal);
+            if (endIntegerPart === -1) {
+                endIntegerPart = $(this).val().length;
+            }
+
+            for (i = endIntegerPart - 3; i > 0; i -= 3) {
+                $(this).appendIn(i, settings.thousands);
             }
         });
 

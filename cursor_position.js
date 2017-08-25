@@ -7,40 +7,44 @@
 (function ($) {
     "use strict";
 
-    $.fn.getCursorPosition = function () {
-        var el = $(this).get(0);
-        var pos = 0;
-        if ('selectionStart' in el) {
-            pos = el.selectionStart;
-        } else if ('selection' in document) {
-            el.focus();
-            var sel = document.selection.createRange();
-            var selLength = document.selection.createRange().text.length;
-            sel.moveStart('character', -el.value.length);
-            pos = sel.text.length - selLength;
-        }
-        return pos;
+    const normalize = (e, pos, len) => {
+        return e < pos ? e : e + len;
     };
 
-    $.fn.setCursorPosition = function (pos) {
+    $.fn.getCursorPosition = function () {
+        var el = $(this).get(0);
+        return el.selectionStart;
+    };
+
+    $.fn.getCursorRange = function () {
+        var el = $(this).get(0);
+        return [ el.selectionStart, el.selectionEnd ];
+    };
+
+    $.fn.setCursorPosition = function (posParam) {
+        var pos = !Array.isArray(posParam) ? [posParam, posParam] : posParam;
         this.each(function (index, elem) {
-            if (elem.setSelectionRange) {
-                elem.setSelectionRange(pos, pos);
-            } else if (elem.createTextRange) {
-                var range = elem.createTextRange();
-                range.collapse(true);
-                range.moveEnd('character', pos);
-                range.moveStart('character', pos);
-                range.select();
-            }
+            elem.setSelectionRange(pos[0], pos[1]);
         });
         return this;
     };
 
+    $.fn.setCursorRange = $.fn.setCursorPosition;
+
     $.fn.stripOut = function (pos) {
-        var a = this.getCursorPosition();
+        var a = this.getCursorRange();
         this.val(this.val().substring(0, pos) + this.val().substring(pos + 1));
-        this.setCursorPosition(a - 1);
+        var newPos = a.map(e => normalize(e, pos, -1));
+        this.setCursorRange(newPos);
+
+        return this;
+    };
+
+    $.fn.appendIn = function (pos, text) {
+        var a = this.getCursorRange();
+        this.val(this.val().substring(0, pos) + text + this.val().substring(pos));
+        var newPos = a.map(e => normalize(e, pos, text.length));
+        this.setCursorRange(newPos);
 
         return this;
     };
